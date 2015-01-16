@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 
 # Monit
@@ -39,3 +40,7 @@ Details [here](https://greenido.wordpress.com/2013/08/27/debug-nodejs-like-a-pro
 #### External Tools used:
 1. Nodemon - https://github.com/remy/nodemon [keep track of any server change and restart the server, perfect for development]
 2. Node-Inspector - https://github.com/node-inspector/node-inspector [for debugging]
+=======
+# Monit
+webpage, webservice monitoring application
+>>>>>>> 086089696f9b40ef60c8d0bc7b995ff0cb5cf6f9
