@@ -70,7 +70,7 @@
 
         // save webpage details
         $("#savewebpage").click(function() {
-            $.post("http://localhost:3000/api/addwebpage", { name: $('#webpagename').val(), url: $('#webpageurl').val(), texttoverify: $('#texttoverify').val(), interval: 15 }, function(data) {
+            $.post("http://localhost:3000/api/addwebpage", { name: $('#webpagename').val(), url: $('#webpageurl').val(), texttoverify: $('#texttoverify').val(), interval: "00:15:00" }, function(data) {
                 alert("web pages added for monitoring");
             });
         });

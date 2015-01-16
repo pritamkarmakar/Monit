@@ -80,7 +80,7 @@ function DoStatusCheck(webpage) {
 				var texts = webpage.texttoverify.split(',');
 				var flag = false;
 				for (var i in texts) {
-					if (body.toLowerCase().indexOf(texts[i].trim()) == -1) {
+					if (body.toLowerCase().indexOf(texts[i].trim().toLowerCase()) == -1) {
 						// log the error
 						db.collection('results').insert({
 							webpageid: webpage._id.toString(),
