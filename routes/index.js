@@ -74,16 +74,15 @@ router.post('/addwebsite', function(req, res) {
 })
 
 /* POST call to add a new web page */
-router.post('/addwebpage', function(req, res) {
+router.post('/api/addwebpage', function(req, res) {
     var db = req.db;
     var name = req.param("name");
     var url = req.param("url");
     var texttoverify = req.param("texttoverify");
     var interval = req.param("interval");
-    var websiteid = req.param("websiteid");
     //validate the input data
-    if (!name || !url || !interval || !websiteid) {
-        res.status(400).send("Please send all required parameters. Required paramaters are - name, url, interval, websiteid");
+    if (!name || !url || !interval) {
+        res.status(400).send("Please send all required parameters. Required paramaters are - name, url, interval");
         return;
     }
     var collection = db.collection('webpages');
@@ -92,7 +91,6 @@ router.post('/addwebpage', function(req, res) {
         "url": url,
         "texttoverify": texttoverify,
         "interval": interval,
-        "websiteid": websiteid
     }, function(err, doc) {
         if (err)
         // If it failed, return error

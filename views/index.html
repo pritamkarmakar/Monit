@@ -70,9 +70,8 @@
 
         // save webpage details
         $("#savewebpage").click(function() {
-
-            $.post("http://localhost:8083/home/addwebpage", { webPageName: $('#webpagename').val(), webPageUrl: $('#webpageurl').val(), textToVerify: $('#texttoverify').val(), parentWebSiteId: $('#parentwebsites').val(), interval: 15 }, function(data) {
-                alert(data);
+            $.post("http://localhost:3000/api/addwebpage", { name: $('#webpagename').val(), url: $('#webpageurl').val(), texttoverify: $('#texttoverify').val(), interval: 15 }, function(data) {
+                alert("web pages added for monitoring");
             });
         });
     });
