@@ -1,0 +1,211 @@
+<html>
+<head>
+    <title>Monit-Home</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="http://bootswatch.com/paper/bootstrap.min.css">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $.ajax({
+            url: 'http://localhost:3000/api/getwebpages',
+            dataType: 'json',
+            success: function(resp) {
+                //var tableIndex = 0;
+                //var options = $("#parentwebsites");
+                var webpages = resp.webpages;
+                //$.each(resp, function(index, value) {
+                    for(var tableIndex in webpages)
+                    {
+
+                        if (tableIndex == 0) {
+                            $('#result').append('<h3>' + "Your Dashboard" + '</h3><table class="table table-striped table-hover" id=resulttable><thead><tr><th>Name</th><th>Url</th><th>Text to Search</th><th>Last Execution</th><th>Status</th></tr></thead><tbody>');
+                        }                 
+
+                    // populate the parent web site dropdown control
+                    //options.append($("<option/>").val(value._id).text(value.Name));
+                    // get the last execution time and the status for this webpage
+                    var executiontime;
+                    var result;
+                    $.ajax({
+                        url: 'http://localhost:3000/api/getresult',
+                        data: { webpageid: webpages[tableIndex]._id.toString() },
+                        dataType: 'json',
+                        async: false,
+                        success: function(resp2) {
+                                //debugger;
+                                if (resp2 != null) {
+                                    executiontime = resp2.result.executiontime;
+                                    result = resp2.result.result == 1 ? true : false;
+                                }
+                            }
+                        });
+                    $("#resulttable").append("<tr><td style='width:20%;'>" + webpages[tableIndex].name + "</td><td><a target='_blank' href='" + webpages[tableIndex].url + "'>" + webpages[tableIndex].url + "</a></td><td style='width:20%;'>" + webpages[tableIndex].texttoverify + "</td><td style='width:15%;'>" + executiontime + "</td><td style='width:10%;'>" + result + "</td></tr>");
+                    $("#resulttable").append("</tbody></table>");
+                    $("#resulttable").append("</br></br>");
+                    //tableIndex = tableIndex + 1;
+                }
+                $("td:contains('true')").html("<img src='/img/blue.png'/>");
+                $("td:contains('false')").html("<img src='/img/red.png'/>");
+            },
+            error:
+            function(req, status, err) {
+                console.log('something went wrong', status, err);
+            }
+        });
+        // save website details
+        $("#savewebsite").click(function() {
+            //$('#addWebsite').modal('hide');
+            //$('#addWebsite').dialog('close');
+            $.post("http://localhost:8083/home/addwebsite", { webSiteName: $('#inputWebsite').val(), ownerEmail: $('#inputEmail').val() }, function(data) {
+                alert("web site added");
+                //$('#addWebsite').modal('hide');
+                //$('#addWebsite').modal('hide');
+                //$('#websiteadded').show();
+
+            });
+        });
+
+        // save webpage details
+        $("#savewebpage").click(function() {
+
+            $.post("http://localhost:8083/home/addwebpage", { webPageName: $('#webpagename').val(), webPageUrl: $('#webpageurl').val(), textToVerify: $('#texttoverify').val(), parentWebSiteId: $('#parentwebsites').val(), interval: 15 }, function(data) {
+                alert(data);
+            });
+        });
+    });
+</script>
+</head>
+<body> 
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Monit</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/Help">API</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/Account/Register" id="registerLink">Register</a></li>
+                    <li><a href="/Account/Login" id="loginLink">Log in</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+<div class="container body-content">
+
+    <div class="row">
+        <br /><br />
+        <div style="float:right">
+            <!-- <a href="#" class="btn btn-primary" id="registerbutton" data-toggle="modal" data-target="#addWebsite">Register a Website</a> -->
+            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addwebpage">Register a webpage</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="result">
+
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Modal for website registration-->
+        <div class="modal fade" id="addWebsite" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Register a new website</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="inputWebsite" class="col-lg-2 control-label">Name</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="inputWebsite" placeholder="Website name">
+                                </div>
+                                <label for="inputEmail" class="col-lg-2 control-label">Email</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="inputEmail" placeholder="Owner email">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="savewebsite">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Modal for webpage registration inside an existing website -->
+        <div class="modal fade" id="addwebpage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Add a new webpage</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="webpagename" class="col-lg-2 control-label">Webpage name</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="webpagename" placeholder="Google Home Page">
+                                </div>
+                                <label for="webpageurl" class="col-lg-2 control-label">Url</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="webpageurl" placeholder="http://www.google.com">
+                                </div>
+                                <label for="texttoverify" class="col-lg-2 control-label">Texts to verify</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="texttoverify" placeholder="Google Search, I'm feeling lucky">
+                                </div>
+                                <label for="monitoringinterval" class="col-lg-2 control-label">Monitoring Interval</label>
+                                <div class="col-lg-10">
+                                    <!--<input type="text" class="form-control" id="monitoringinterval" placeholder="Monitoring Interval (in minutes)">-->
+                                    <div class="btn-group open">
+                                      <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                        Interval
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">every 5 minutes</a></li>
+                                        <li><a href="#">every 15 minutes</a></li>
+                                        <li><a href="#">every 30 minutes</a></li>
+                                        <li><a href="#">every hour</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                                <!--<label for="parentwebsite" class="col-lg-2 control-label">Parent website</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control" id="parentwebsites">
+                                    </select>
+                                </div>-->
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="savewebpage">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
