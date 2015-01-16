@@ -8,7 +8,7 @@ router.get('/', function(req, res) {
     });
 });
 
-router.get('/employeelist', function(req, res) {
+router.get('/api/employeelist', function(req, res) {
     res.send({
         Users: [{
             name: 'Pritam'
@@ -34,6 +34,17 @@ router.get('/userlist', function(req, res) {
     collection.find({}, function(e, docs) {
         res.send({
             "userlist": docs
+        });
+    });
+})
+
+/* GET all the web pages */
+router.get('/api/getwebpages', function(req, res) {
+    var db = req.db;
+    var collection = db.collection('webpages');
+    collection.find({}, function(e, docs) {
+        res.send({
+            "webpages": docs
         });
     });
 })
@@ -92,8 +103,8 @@ router.post('/addwebpage', function(req, res) {
 })
 
 
-/* POST call to add all the result log */
-router.post('/results', function(req, res) {
+/* POST call to add result log for a webpage */
+    router.post('/addresult', function(req, res) {
     var db = req.db;
     var webpageid = req.param("webpageid");
     var executiontime = req.param("lastexecutiontime");
@@ -117,6 +128,32 @@ router.post('/results', function(req, res) {
         else
             res.send("OK");
     });
+})
+
+    /* GET the latest result of a webpage */
+    router.get('/api/getresult', function(req, res){
+// read the querystring param webpageid
+        var pageid = req.param("webpageid");
+        var db = req.db;
+    var collection = db.collection('results');
+    collection.find({}, function(e,docs){
+    // iterate over the webpage list
+    //for (var i = 0; i < docs.length; i++) {
+        // check if results table has any record for this webpage
+        db.collection('results').find({'webpageid': pageid }, function(err, doc)
+        {
+            if(err)
+            {
+                console.log("GETTING ERROR");
+                console.log(err);
+                return;
+            }
+            res.send({
+            "result": doc[doc.length-1]
+        });
+        });
+    //};
+});
 })
 
 /* POST call to add email notification log */

@@ -109,3 +109,8 @@ function DoStatusCheck(webpage) {
 		})
 	}
 }
+
+function SendEmailNotification()
+{
+	
+}
