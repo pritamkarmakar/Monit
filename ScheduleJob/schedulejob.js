@@ -13,7 +13,6 @@ new CronJob('* * * * * * ', function() {
 		for (var i = 0; i < docs.length; i++) {
 			var webpage = docs[i];
 			var interval = docs[i].interval;
-			//console.log("Interval: " + interval);
 			// check if results table has any record for this webpage
 			(function(webpage) {
 				db.collection('results').find({
@@ -25,35 +24,22 @@ new CronJob('* * * * * * ', function() {
 						return;
 					} else {
 						if (typeof doc !== 'undefined' && doc && doc.length > 0) {
-							console.log("--------------------------");
-							console.log('Processing: ' + doc[0].webpageid);
 							// get the last execution time of this webpage and current time
 							var currentTime = moment();
 							var lastExecutionTime = moment(doc[0].executiontime);
-							console.log("last execution time:" + lastExecutionTime.format());
-
 							// get the total duration between current time and last execution time
 							var duration = moment.duration(currentTime.diff(lastExecutionTime));
 							// convert the duration into minutes
 							var minutes = duration.asMinutes();
-							console.log('duration in minutes: ' + minutes);
-
 							// convert the interval from the webpage table to a moment object and then convert it into minutes
 							var intervalModified = moment(webpage.interval, 'hh:mm:ss');
 							var intervalInMinutes = intervalModified.hour() * 60 + intervalModified.minute() + intervalModified.second() / 60;
-
-							console.log("interval: " + intervalInMinutes);
-
 							// if the last execution duration is more than the interval then re-execute
 							if (minutes > intervalInMinutes) {
 								console.log("item to process again");
 								console.log(doc[0].webpageid);
 								DoStatusCheck(webpage);
-							} else {
-								console.log("ITEM NOT FOR PROCESS");
-								console.log(doc.webpageid);
 							}
-							console.log("--------------------------");
 						} else {
 							// if there is no record in the results table then we have to process it
 							DoStatusCheck(webpage);
@@ -74,8 +60,9 @@ function DoStatusCheck(webpage) {
 	// validate webpage has a url property
 	if (typeof webpage.url !== 'undefined' && webpage.url) {
 
-		request(webpage.url.toString(), function(error, response, body) {
-			if (!error && response.statusCode == 200) {
+		request(webpage.url.toString()+ "/ncr", function(error, response, body) {
+			//if (!error && response.statusCode == 200) {
+				if (!error) {
 				// verify all the texts are present in the webpage
 				var texts = webpage.texttoverify.split(',');
 				var flag = false;
