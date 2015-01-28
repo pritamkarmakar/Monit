@@ -90,7 +90,7 @@ router.post('/api/addwebpage', function (req, res) {
         "name": name,
         "url": url,
         "texttoverify": texttoverify,
-        "interval": interval,
+        "interval": interval
     }, function (err, doc) {
         if (err)
         // If it failed, return error
@@ -152,11 +152,10 @@ router.get('/api/getresult', function (req, res) {
     });
 })
 
-/* GET the latest result of a webpage */
+/* GET the latest result of a webpage, we are not using this API and will decommission later on */
 router.get('/api/getpagecontent', function (req, res) {
     // read the querystring params
     var address = req.param("url");
-    var texttoverify = req.param("texttoverify");
     var phantom = require('phantom');
     var finalStatus;
     var redirectUrl;

@@ -21,7 +21,7 @@ mongo
 show dbs /* to see all available databases */
 use <databasename>
 db.webpages.find().pretty() /* to see all the records inside webpages collection */ 
-db.webpages.update({name:'HOLA'}, {url:'www.google.com', name: 'HOLA', interval: '00:16:10'} /* update a specific record */
+db.webpages.update({name:'HOLA'}, {url:'www.google.com', name: 'HOLA', interval: '00:16:10'}) /* update a specific record */
 ```
 
 
