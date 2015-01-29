@@ -1,5 +1,5 @@
 # Monit
-Webpage, webservice monitoring application. Technology stack - node.js, mongodb, pjantomjs, bootstrap css
+Webpage, webservice monitoring application. Technology stack - node.js, mongodb, phantomjs, bootstrap css
 
 ## Getting Started
 #### Configure MongoDB:
