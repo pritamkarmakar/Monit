@@ -19,5 +19,8 @@ node www
 ```
 2. Open browser and navigate to http://localhost:3000
 
-
-
+#### Screenshots:
+This is how the dashboard will look like -
+![ScreenShot](https://raw.githubusercontent.com/pritamkarmakar/monit/master/public/img/dashboard.PNG)
+Add a new webpage for monitoring -
+![ScreenShot](https://raw.githubusercontent.com/pritamkarmakar/monit/master/public/img/addnewpage.PNG)
