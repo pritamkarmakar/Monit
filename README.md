@@ -1,41 +1,23 @@
 # Monit
-webpage, webservice monitoring application
+Webpage, webservice monitoring application. Technology stack - node.js, mongodb
 
 ## Getting Started
-#### Start MongoDB:
+#### Configure MongoDB:
+1. Install Mongodb: install Mongodb from http://www.mongodb.org/
+2. Start Mongodb:
+Open command prompt as an admin and run below script
 ```bash
 cd $<mongodb dir>\bin
-.\mongod --dbpath $"<mongodb dir>\data"
+mongod --dbpath $"<mongodb dir>\data"
 ```
 
-#### Start Application
+#### Start Monit:
+1. Open another command line instance and run below command
 ```bash
-cd $<application dir>\bin
+cd $<monit source code directory>\bin
 node www
 ```
-
-#### Query to mongodb
-```bash
-cd $<mongodb dir>\bin
-mongo
-show dbs /* to see all available databases */
-use <databasename>
-db.webpages.find().pretty() /* to see all the records inside webpages collection */ 
-db.webpages.update({name:'HOLA'}, {url:'www.google.com', name: 'HOLA', interval: '00:16:10'}) /* update a specific record */
-```
+2. Open browser and navigate to http://localhost:3000
 
 
-#### Debug Node js application
-* install node-inspector globally (npm install -g node-inspector)
-* From a command-line window, run: node-inspector. If you get any error like 'Cannot start the server at 0.0.0.0:8080. Error: listen EACCES' try this option node-inspector -p 8090 (or other port)
-* Start the node.js app with "node --debug-brk bin/www" [-brk will stop the app in the first line]
-* open Chrome and go to http://localhost:8090/debug?port=5858. You'll get the node-inspector UI but without any running app.
-* from another command-line window, run your app with the --debug switch like this: node --debug bin\www
-* refresh the Chrome tab and voila! Use --debug-brk to break at the begining
-
-Details [here](https://greenido.wordpress.com/2013/08/27/debug-nodejs-like-a-pro/)
-
-#### External Tools used:
-1. Nodemon - https://github.com/remy/nodemon [keep track of any server change and restart the server, perfect for development]
-2. Node-Inspector - https://github.com/node-inspector/node-inspector [for debugging]
 

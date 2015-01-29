@@ -1,6 +1,7 @@
 var CronJob = require('cron').CronJob;
 var moment = require('moment');
 
+// trigger this method in every minute
 new CronJob('* * * * *', function () {
 
     // get all the records from the webpages table
